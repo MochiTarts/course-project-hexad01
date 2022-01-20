@@ -7,7 +7,7 @@ Zining (Jenny) Yu      | yuzi4     | 1005060979       | zi.yu@mail.utoronto.ca  
 Jingrun Long           | longjin2  | 1005543119       | jingrun.long@mail.utoronto.ca       | Scorpix#9521     | 6475727026    |           |
 Aidan Zorbas           | zorbasai  | 1005386075       | aidan.zorbas@mail.utoronto.ca       | ajx#2821         | 2899233488    | Discord   |
 Vanessa Pierre         | pierrev1  | 1005201844       | vanessa.pierre@mail.utoronto.ca     | nessssa#4490     | 6479238715    | Discord   |
-name                   |           |                  |                                     |                  |               |           |
+Dawson Brown           | browndaw  | 1005392932       | dawson.brown@mail.utoronto.ca       | Enticius#9211    | 9053917176    | Discord   |
 name                   |           |                  |                                     |                  |               |           |
 
 
