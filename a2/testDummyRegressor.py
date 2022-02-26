@@ -42,7 +42,6 @@ def testDummyRegressor(case, desc, const, X, y):
         assert type(result['constant']) == type(const)
         assert type(result['constant']) != np.ndarray
         print("    [PASS] Test 1: constant is of the expected type.")
-
     except:
         print("    [FAIL] Test 1: constant should be", type(const), "not", type(result['constant']))
     
