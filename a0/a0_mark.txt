@@ -1,0 +1,78 @@
+Team Name: HEXAD01
+
+Marked By: Donnie Siu
+
+Total mark for A0 : 24/24   
+
+
+
+Team.md (Max 1 mark)
+  - Repository is well structured and communication methods are indicated (max 1 marks) [0 marks: not structered properly, 1 mark : structered properly] (1/1)
+	
+	team.md mark: 1/1
+	
+
+
+Team introduction (Max 2 marks)
+  - Team's goals and strengths are well defined (max 2 marks) [0 marks: not at all, 1 mark : hard to understand or missing components, 2 marks : well defined] (2/2)
+
+    Your mark: 2/2
+  
+
+
+Team member introduction (Max 3 marks) 
+  - Each team member's biography is present and informative (max 3 marks) [0 marks : no biography, -0.5 for each missing member's biography, 3 marks : all member's biography is informative] (3/3)
+
+   Your mark: 3/3
+   
+
+
+Team agreement (max 4 marks)
+   - Contingency planning [0 marks: not present, 1 mark: present] (1/1)
+   - Communication method [0 marks: not present, 1 mark: present] (1/1)
+   - Additional components that define a team agreement [0 marks: not present, 1 mark: one other component present, 2 marks: atleast 2 other components] (2/2)
+
+   Your mark: 4/4
+
+
+
+Software development methodology (max 4 marks)
+   - Planning tools defined [0 marks: not present, 1 mark: present] (1/1)
+   - Development methodology stated [0 marks: not present, 1 mark: present] (1/1)
+   - Development methodology elaborated in detail without doubtable remarks [0 marks: not present, 1 mark: somewhat defined, 2 marks: well defined] (2/2)
+	
+   Your mark: 4/4
+
+
+
+Presentation (max 5 marks)
+   - Table of contents or navigation is present [0 marks: not present, 1 mark: present] (1/1)
+   - First impression of documentation is professional [0 marks: hard to read or unprofessional, 1 mark: layout is professional] (1/1)
+   - Sequence of structure makes sense [0 marks: not present or items are all over the place, 1 mark: sequence of presentation is sensible] (1/1)
+   - Overall impression [0 marks: not well done/looks like no effort, 1 mark: somewhat decent/could use more effort, 2 marks: marker is impressed or pleased] (2/2)
+	
+   Your mark: 5/5
+
+
+
+Quality (max 5 marks)
+  - Writing language
+    [5 marks : No grammer or spelling mistakes. Sentences are professional.]
+    [4 marks : One or two grammer/spelling mistakes.]
+    [3 marks : Multiple grammer/spelling mistakes.]
+    [2 marks : Broken sentances everywhere.]
+    [1 marks : Only bullet points and/or vague sentances that don't have meaning.]
+    [0 marks : Lack of writing and definition of items.]
+
+    Your mark: 5/5
+
+Comments:
+
+Great work everyone! Well deserved 100%!
+
+Wow! I see that a lot of members have a wealth of experiences and some have even worked at 
+large tech companies like Microsoft and IBM. You guys are a very promissing team! I am 
+looking forward to seeing your future deliverables!
+
+Lastly, yes A0 is out of 24 and not 25. If we sum up the marks under section 3 of the handout 
+we get 1+2+3+4+4=14 marks for quality and 10 marks for presentation (totaling 24 marks).
