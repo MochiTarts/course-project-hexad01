@@ -10,7 +10,7 @@ SEP = '.' * 150
 LINE = '=' * 150
 
 
-def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters):
+def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, replacement):
     '''
     [Issue #18057]
     RandomizedSearchCV is not sampling uniformly from param_distributions
@@ -50,7 +50,7 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters):
     params_both = [params1, params2]
 
     print("Creating RandomizedSearchCV...")
-    rand = RandomizedSearchCV(rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=1)
+    rand = RandomizedSearchCV(rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=1, with_replacement=replacement)
     print("Fitting...")
     rand.fit(X, y)
 
@@ -80,26 +80,44 @@ def testAll(cases):
         iters = testCase['args'][0]
         params1 = testCase['args'][1]
         params2 = testCase['args'][2]
+        replacement = testCase['args'][3]
 
-        testRandomizedSearchCV(case, desc, params1, params2, iters)
+
+        testRandomizedSearchCV(case, desc, params1, params2, iters, replacement)
 
 
 testCases = {
-    'Test 1: few iterations' : {
-        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80]', 
-        'args': [50, [10, 20, 30, 40], [50, 60, 70, 80] ]
+    'Test 1: few iterations, with replacement' : {
+        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], with_replacement=true', 
+        'args': [50, [10, 20, 30, 40], [50, 60, 70, 80], True]
         },
-    'Test 2: many iterations' : {
-        'desc': 'iterations = 100; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80]', 
-        'args': [100, [10, 20, 30, 40], [50, 60, 70, 80] ]
+    'Test 2: many iterations, with replacement' : {
+        'desc': 'iterations = 100; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], with_replacement=true', 
+        'args': [100, [10, 20, 30, 40], [50, 60, 70, 80], True]
         },
-    'Test 3: different array values for params2': {
-        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85]', 
-        'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85] ]
+    'Test 3: different array values for params2, with replacement': {
+        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], with_replacement=true', 
+        'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85], True]
         },
-    'Test 4: different array values for params1': {
-        'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85]', 
-        'args': [50, [11, 22, 32, 44], [50, 60, 70, 80] ]
+    'Test 4: different array values for params1, with replacement': {
+        'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], with_replacement=true', 
+        'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], True ]
+        },
+    'Test 5: few iterations, without replacement' : {
+        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], with_replacement=false', 
+        'args': [50, [10, 20, 30, 40], [50, 60, 70, 80], False]
+        },
+    'Test 6: many iterations, without replacement' : {
+        'desc': 'iterations = 100; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], with_replacement=false', 
+        'args': [100, [10, 20, 30, 40], [50, 60, 70, 80], False]
+        },
+    'Test 7: different array values for params2, without replacement': {
+        'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], with_replacement=false', 
+        'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85], False]
+        },
+    'Test 8: different array values for params1, without replacement': {
+        'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], with_replacement=false', 
+        'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], False ]
         }
 }
 
