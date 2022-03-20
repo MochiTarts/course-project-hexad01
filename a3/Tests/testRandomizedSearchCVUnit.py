@@ -9,7 +9,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 SEP = '.' * 150
 LINE = '=' * 150
-prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
+prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N] "
 
 
 def testRandomizedSearchCV(case, desc, params, expt, iters, repetition, bugFixed):
@@ -140,8 +140,7 @@ def testAll(cases):
         repetition = testCase['args'][1]
         params = [testCase['args'][i] for i in range(2, len(testCase['args']))]
         expt = testCase['expt']
-
-        testRandomizedSearchCV(case, desc, params, expt, iters, repetition)
+        testRandomizedSearchCV(case, desc, params, expt, iters, repetition, bugFixed)
 
 
 testCases = {

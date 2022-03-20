@@ -8,7 +8,7 @@ import sys
 
 SEP = '.' * 150
 LINE = '=' * 150
-prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
+prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N] "
 
 
 def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replacement, bugFixed):
