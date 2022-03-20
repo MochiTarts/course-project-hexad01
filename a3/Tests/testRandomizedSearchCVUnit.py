@@ -31,7 +31,7 @@ def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
 
     rand = RandomizedSearchCV(
         rf, params, cv=5, scoring='accuracy',
-            n_iter=iters, random_state=1) # , without_replacement=!repetition
+            n_iter=iters, random_state=1, without_replacement= not repetition) # , without_replacement=!repetition
     rand.fit(X, y)
 
     print(SEP)
@@ -146,8 +146,8 @@ testCases = {
         'expt': [50, 50]
         },
     'Test Set 3: Repetition off and Equal Distribution, 3 Param Dictionaries' : {
-        'desc': 'repetition = False; iterations = 30',
-        'args': [30, False,
+        'desc': 'repetition = False; iterations = 50',
+        'args': [50, False,
                  {'n_estimators': [10, 20, 30],
                     'min_samples_leaf': [1, 2, 3, 4, 5]},
                  {'n_estimators': [40, 50, 60],
