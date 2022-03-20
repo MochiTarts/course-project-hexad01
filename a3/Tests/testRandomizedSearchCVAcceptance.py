@@ -50,7 +50,8 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
     params_both = [params1, params2]
 
     print("Creating RandomizedSearchCV...")
-    rand = RandomizedSearchCV(rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=2, without_replacement= no_replacement)
+    rand = RandomizedSearchCV(
+        rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=2, without_replacement= no_replacement)
     print("Fitting...")
     rand.fit(X, y)
 
