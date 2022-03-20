@@ -95,11 +95,11 @@ testCases = {
         'desc': 'iterations = 100; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], without_replacement=true',
         'args': [100, [10, 20, 30, 40], [50, 60, 70, 80], True]
         },
-    'Test 3: different array values for params2, without replacement': {
+    'Test 3: different list values for params2, without replacement': {
         'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], without_replacement=true',
         'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85], True]
         },
-    'Test 4: different array values for params1, without replacement': {
+    'Test 4: different list values for params1, without replacement': {
         'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], without_replacement=true',
         'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], True ]
         },
@@ -111,11 +111,11 @@ testCases = {
         'desc': 'iterations = 100; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 60, 70, 80], without_replacement=false',
         'args': [100, [10, 20, 30, 40], [50, 60, 70, 80], False]
         },
-    'Test 7: different array values for params2, with replacement': {
+    'Test 7: different list values for params2, with replacement': {
         'desc': 'iterations = 50; params1 n_estimators: [10, 20, 30, 40], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], without_replacement=false',
         'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85], False]
         },
-    'Test 8: different array values for params1, with replacement': {
+    'Test 8: different list values for params1, with replacement': {
         'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], without_replacement=false',
         'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], False ]
         }
