@@ -116,7 +116,7 @@ testCases = {
         'args': [50, [10, 20, 30, 40], [50, 55, 60, 65, 70, 75, 80, 85], False]
         },
     'Test 8: different array values for params1, without replacement': {
-        'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], with_replacement=false',
+        'desc': 'iterations = 50; params1 n_estimators: [11, 22, 32, 44], params2 n_estimators [50, 55, 60, 65, 70, 75, 80, 85], without_replacement=false',
         'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], False ]
         }
 }
