@@ -5,9 +5,9 @@ from sklearn.model_selection import RandomizedSearchCV
 import sys
 import os
 
-
 SEP = '.' * 150
 LINE = '=' * 150
+prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
 
 
 def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replacement):
@@ -17,6 +17,11 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
     when passed a list of multiple dicts.
     Source: https://github.com/scikit-learn/scikit-learn/issues/18057
     '''
+    selection = input(prompt)
+    while not selection in 'yYnN':
+        selection = input(prompt)
+    bugFixed = selection.upper() == "Y"
+    
     print(LINE)
     print(case, ":", desc)
     print(LINE)
@@ -28,11 +33,9 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
 
     rf = RandomForestClassifier()
 
-
     print("Setting Params...")
     print("params1 n_estimators:" + str(params1ns))
     print("params1 min_samples_leaf:" + str([1, 2, 3, 4, 5, 6]))
-
 
     params1 = {}
     params1['n_estimators'] = params1ns
@@ -50,8 +53,12 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
     params_both = [params1, params2]
 
     print("Creating RandomizedSearchCV...")
-    rand = RandomizedSearchCV(
-        rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=2, without_replacement= no_replacement)
+    if bugFixed:
+        rand = RandomizedSearchCV(
+            rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=2, without_replacement=no_replacement)
+    else: 
+        rand = RandomizedSearchCV(
+            rf, params_both, cv=5, scoring='accuracy', n_iter=iters, random_state=2)
     print("Fitting...")
     rand.fit(X, y)
 
@@ -59,17 +66,17 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
     dict2Chosen = len(list(filter(lambda x: (x > 45), rand.cv_results_['param_n_estimators'])))
 
     print(SEP)
-
     print("Test Results:")
     print("Selected n_estimators:")
     print(rand.cv_results_['param_n_estimators'])
     print("Params from dict 1 chosen: " + str(dict1Chosen) + " times")
     print("Params from dict 2 chosen: " + str(dict2Chosen) + " times")
     print('\n')
-    print("Final percent of choices from dict 1: " + str(((dict1Chosen / len(rand.cv_results_['param_n_estimators']) ) * 100)))
-    print("Final percent of choices from dict 2: " + str(((dict2Chosen / len(rand.cv_results_['param_n_estimators']) ) * 100)))
+    print("Final percent of choices from dict 1: " + str(
+        ((dict1Chosen / len(rand.cv_results_['param_n_estimators']) ) * 100)))
+    print("Final percent of choices from dict 2: " + str(
+        ((dict2Chosen / len(rand.cv_results_['param_n_estimators']) ) * 100)))
     print("Expected percentages: near 50%")
-
     print(LINE, '\n' * 2)
 
 
@@ -82,8 +89,6 @@ def testAll(cases):
         params1 = testCase['args'][1]
         params2 = testCase['args'][2]
         without_replacement = testCase['args'][3]
-
-
         testRandomizedSearchCV(case, desc, params1, params2, iters, without_replacement)
 
 
@@ -121,6 +126,5 @@ testCases = {
         'args': [50, [11, 22, 32, 44], [50, 60, 70, 80], False ]
         }
 }
-
 
 testAll(testCases)

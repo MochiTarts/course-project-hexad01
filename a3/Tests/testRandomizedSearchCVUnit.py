@@ -8,6 +8,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 SEP = '.' * 150
 LINE = '=' * 150
+prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
 
 
 def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
@@ -17,6 +18,11 @@ def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
     when passed a list of multiple dicts.
     Source: https://github.com/scikit-learn/scikit-learn/issues/18057
     '''
+    selection = input(prompt)
+    while not selection in 'yYnN':
+        selection = input(prompt)
+    bugFixed = selection.upper() == "Y"
+
     print(LINE)
     print(case, ":", desc)
     print(LINE)
@@ -29,9 +35,15 @@ def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
     for i in range(len(params)):
         print("\t dict" + str(i + 1) + ": " + str(params[i]))
 
-    rand = RandomizedSearchCV(
-        rf, params, cv=5, scoring='accuracy',
-            n_iter=iters, random_state=1, without_replacement= not repetition) # , without_replacement=!repetition
+    if bugFixed:
+        rand = RandomizedSearchCV(
+            rf, params, cv=5, scoring='accuracy',
+                n_iter=iters, random_state=1, without_replacement = not repetition)
+    else:
+        rand = RandomizedSearchCV(
+            rf, params, cv=5, scoring='accuracy',
+                n_iter=iters, random_state=1)
+
     rand.fit(X, y)
 
     print(SEP)
