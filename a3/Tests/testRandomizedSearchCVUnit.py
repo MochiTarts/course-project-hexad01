@@ -1,6 +1,7 @@
 from functools import reduce
 import itertools
 import numpy as np
+import os
 import scipy
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
@@ -11,18 +12,13 @@ LINE = '=' * 150
 prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
 
 
-def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
+def testRandomizedSearchCV(case, desc, params, expt, iters, repetition, bugFixed):
     '''
     [Issue #18057]
     RandomizedSearchCV is not sampling uniformly from param_distributions
     when passed a list of multiple dicts.
     Source: https://github.com/scikit-learn/scikit-learn/issues/18057
     '''
-    selection = input(prompt)
-    while not selection in 'yYnN':
-        selection = input(prompt)
-    bugFixed = selection.upper() == "Y"
-
     print(LINE)
     print(case, ":", desc)
     print(LINE)
@@ -130,6 +126,13 @@ def testRandomizedSearchCV(case, desc, params, expt, iters, repetition):
 
 
 def testAll(cases):
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    selection = input(prompt)
+    while not selection in 'yYnN':
+        selection = input(prompt)
+    bugFixed = selection.upper() == "Y"
+
     for case in cases.keys():
         testCase = cases[case]
         desc = testCase['desc']

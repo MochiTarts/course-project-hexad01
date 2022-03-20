@@ -1,26 +1,23 @@
 import numpy as np
+import os
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV
 import sys
-import os
+
 
 SEP = '.' * 150
 LINE = '=' * 150
 prompt = "Does the scikit-learn source code have the bugfix applied? [Y/N]"
 
 
-def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replacement):
+def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replacement, bugFixed):
     '''
     [Issue #18057]
     RandomizedSearchCV is not sampling uniformly from param_distributions
     when passed a list of multiple dicts.
     Source: https://github.com/scikit-learn/scikit-learn/issues/18057
     '''
-    selection = input(prompt)
-    while not selection in 'yYnN':
-        selection = input(prompt)
-    bugFixed = selection.upper() == "Y"
     
     print(LINE)
     print(case, ":", desc)
@@ -82,6 +79,12 @@ def testRandomizedSearchCV(case, desc, params1ns, params2ns, iters, no_replaceme
 
 def testAll(cases):
     os.system('cls' if os.name == 'nt' else 'clear')
+    
+    selection = input(prompt)
+    while not selection in 'yYnN':
+        selection = input(prompt)
+    bugFixed = selection.upper() == "Y"
+    
     for case in cases.keys():
         testCase = cases[case]
         desc = testCase['desc']
@@ -89,7 +92,7 @@ def testAll(cases):
         params1 = testCase['args'][1]
         params2 = testCase['args'][2]
         without_replacement = testCase['args'][3]
-        testRandomizedSearchCV(case, desc, params1, params2, iters, without_replacement)
+        testRandomizedSearchCV(case, desc, params1, params2, iters, without_replacement, bugFixed)
 
 
 testCases = {
