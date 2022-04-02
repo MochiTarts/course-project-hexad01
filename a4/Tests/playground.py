@@ -177,7 +177,6 @@ def verifyFitPredictResults(useBKM, dataset, results, km):
     return [reMap(list(results))[i] for i in results] == [reMap(expected)[i] for i in expected]
 
 
-
 def reMap(arr):
     dict = {}
     counter = 0
