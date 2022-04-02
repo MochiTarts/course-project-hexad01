@@ -1,5 +1,6 @@
 from sklearn.cluster import KMeans
 import numpy as np
+
 SEP = "=" * 100
 data = {
     "Dataset 1" : {
@@ -11,7 +12,6 @@ data = {
         "expected": {
             "labels" : [1, 0],
             "centers" : [[0.8], [0.2]],
-            "predict" : [1, 0],
             "transform" : [[0.14, 0.46], [0.74, 0.14]]
         }
     },
@@ -32,7 +32,6 @@ data = {
             "labels" : [0, 0, 1, 1],
             "centers" : [[0.785, 0.54 ],
                         [0.27,  0.415]],
-            "predict" : [1, 0, 0],
             "transform" : [[0.75407228, 0.3826552 ],
                             [0.235,      0.62835102],
                             [0.44342418, 0.58917315]]
@@ -62,7 +61,6 @@ data = {
                         [0.34, 0.4 ],
                         [0.8,  0.5 ],
                         [0.2,  0.43]],
-            "predict": [1, 0, 2],
             "transform" : [[0.4554119, 0.14, 0.48600412, 0.03,      
                             0.4652956, 0.1029563, 0.40447497],
                         [0.29410882, 0.74545288, 0.57140179, 0.60299254,  
@@ -85,7 +83,7 @@ data = {
         "expected" : {
             "labels": None,
             "centers": None,
-            "predict": None
+            "transform": None
         }
     }
 }
@@ -113,13 +111,12 @@ def testAll(fit=True, predict=False, transform=False):
                 print("Testing predict()")
                 predictOut = km.predict(dataset["pre"])
                 print("\nPredict:\n", predictOut)
-                print(verifyPredictResults(dataset, predictOut))
+                print(verifyPredictResults(dataset, predictOut, km))
 
             if transform:
                 print("Testing transform()")
 
         
-
 def verifyFitResults(dataset, km):
     expected = dataset["expected"]
     expLabels = expected["labels"] 
@@ -129,9 +126,18 @@ def verifyFitResults(dataset, km):
     return received == expected and set(expLabels) == set(km.labels_)
 
 
-def verifyPredictResults(dataset, results):
-    expResults = dataset["expected"]["predict"]
-    return set(expResults) == set(results) and len(expResults) == len(results)
+def verifyPredictResults(dataset, results, km):
+    data = dataset["pre"]
+    # Condition 1: Each data point belongs to their correct cluster
+    for id in range(len(data)):
+        expected_min = sum([(data[id][n] - km.cluster_centers_[results[id]][n])**2 for n in range(km.n_features_in_)])
+
+        for point in km.cluster_centers_:
+            local_min = sum([(data[id][n] - point[n])**2 for n in range(km.n_features_in_)])
+            if (local_min < expected_min):
+                return False
+    # Condition 2: Checks that result is the correct size
+    return len(results) == len(data)
 
    
 if __name__ == '__main__':
