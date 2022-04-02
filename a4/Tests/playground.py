@@ -124,7 +124,7 @@ def testAll(useBKM=True, fit=True, predict=False, transform=False, score=False):
             print("Testing fit_predict()")
             predictOut = km.fit_predict(dataset["fit"])
             print("\nFit Predict:\n", predictOut)
-            print(verifyFitPredictResults(dataset, predictOut, km))
+            print(verifyFitPredictResults(useBKM, dataset, predictOut, km))
         
         if fit and transform:
             print("Testing fit_transform()")
@@ -155,8 +155,8 @@ def verifyPredictResults(dataset, results, km):
     return len(results) == len(data)
 
 
-def verifyFitPredictResults(dataset, results, km):
-    data = dataset["fit"]
+def verifyFitPredictResults(useBKM, dataset, results, km):
+    data = np.array(dataset["fit"])
 
     # Condition 1: Checks that results is the correct size
     if (len(results) != len(data)):
@@ -172,7 +172,8 @@ def verifyFitPredictResults(dataset, results, km):
                 return False
 
     # Condition 3: fit_predict() == fit().predict()
-    expected = list(KMeans(n_clusters=km.n_clusters).fit(data).predict(data))
+    KM2 = BisectingKMeans if useBKM else KMeans
+    expected = list(KM2(n_clusters=km.n_clusters).fit(data).predict(data))
     return [reMap(list(results))[i] for i in results] == [reMap(expected)[i] for i in expected]
 
 
