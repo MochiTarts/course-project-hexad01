@@ -1,4 +1,5 @@
 from sklearn.cluster import KMeans
+from sklearn.cluster import BisectingKMeans
 import numpy as np
 
 SEP = "=" * 100
@@ -89,15 +90,15 @@ data = {
 }
 
 
-def testAll(fit=True, predict=False, transform=False):
+def testAll(useBKM=True, fit=True, predict=False, transform=False, score=False):
     for set in data.keys():
 
         if set == "Dataset 4": # Take this out when DS4 is done
             break
 
         print (SEP + "\n" + set + '\n' + SEP)
-        dataset = data[set]
-        km = KMeans(n_clusters=dataset["K"])
+        dataset = data[set]; k = dataset["K"]
+        km = BisectingKMeans(n_clusters=k) if useBKM else KMeans(n_clusters=k)
         X = np.array(dataset["fit"])
 
         if fit:
@@ -109,25 +110,39 @@ def testAll(fit=True, predict=False, transform=False):
 
             if predict:
                 print("Testing predict()")
-                predictOut = km.predict(dataset["pre"])
+                predictOut = km.predict(np.array(dataset["pre"]))
                 print("\nPredict:\n", predictOut)
                 print(verifyPredictResults(dataset, predictOut, km))
 
             if transform:
                 print("Testing transform()")
+            
+            if score:
+                print("Testing score()")
+        
+        if fit and predict:
+            print("Testing fit_predict()")
+            predictOut = km.fit_predict(dataset["fit"])
+            print("\nFit Predict:\n", predictOut)
+            print(verifyFitPredictResults(dataset, predictOut, km))
+        
+        if fit and transform:
+            print("Testing fit_transform()")
 
         
 def verifyFitResults(dataset, km):
     expected = dataset["expected"]
     expLabels = expected["labels"] 
     expCenters = np.array(expected["centers"])
+    # Condition 1: cluster centers contain the same values, but not necessarily in the same order
     received = [float('%.3f' % elem) for elem in list(np.sort(km.cluster_centers_.flat))]
     expected = [float('%.3f' % elem) for elem in list(np.sort(expCenters.flat))]
+    # Condition 2: Contains the same number of labels, and labels are identical
     return received == expected and set(expLabels) == set(km.labels_)
 
 
 def verifyPredictResults(dataset, results, km):
-    data = dataset["pre"]
+    data = np.array(dataset["pre"])
     # Condition 1: Each data point belongs to their correct cluster
     for id in range(len(data)):
         expected_min = sum([(data[id][n] - km.cluster_centers_[results[id]][n])**2 for n in range(km.n_features_in_)])
@@ -138,6 +153,38 @@ def verifyPredictResults(dataset, results, km):
                 return False
     # Condition 2: Checks that result is the correct size
     return len(results) == len(data)
+
+
+def verifyFitPredictResults(dataset, results, km):
+    data = dataset["fit"]
+
+    # Condition 1: Checks that results is the correct size
+    if (len(results) != len(data)):
+        return False
+
+    # Condition 2: Each data point belongs to their correct cluster
+    for id in range(len(data)):
+        expected_min = sum([(data[id][n] - km.cluster_centers_[results[id]][n])**2 for n in range(km.n_features_in_)])
+
+        for point in km.cluster_centers_:
+            local_min = sum([(data[id][n] - point[n])**2 for n in range(km.n_features_in_)])
+            if (local_min < expected_min):
+                return False
+
+    # Condition 3: fit_predict() == fit().predict()
+    expected = list(KMeans(n_clusters=km.n_clusters).fit(data).predict(data))
+    return [reMap(list(results))[i] for i in results] == [reMap(expected)[i] for i in expected]
+
+
+
+def reMap(arr):
+    dict = {}
+    counter = 0
+    for i in arr:
+        if i not in dict:
+            dict[i] = counter
+            counter += 1
+    return dict
 
    
 if __name__ == '__main__':
