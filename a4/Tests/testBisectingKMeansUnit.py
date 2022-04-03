@@ -79,10 +79,15 @@ data = {
         "pre" : [[0.26, 0.42],
                 [0.70, 0.47],
                 [0.47, 0.83]],
+        "tra" : [[0.34, 0.43],
+                [0.94, 0.34]],
 
         "expected" : {
-            "labels": None,
-            "centers": None
+            "labels": [0, 0, 0, 2, 2, 2, 1],
+            "centers": [[0.263, 0.403],
+                        [0.77, 0.523],
+                        [0.63, 0.82]],
+            "score": -0.03373
         }
     }
 }
@@ -97,8 +102,8 @@ def testAll(
     ):
     for set in data.keys():
 
-        if set == "Dataset 4": # Take this out when DS4 is done
-            break
+        #if set == "Dataset 4": # Take this out when DS4 is done
+        #    break
 
 
         print (SEP + "\n" + set + '\n' + SEP)
