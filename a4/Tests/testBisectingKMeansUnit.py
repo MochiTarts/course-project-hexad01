@@ -101,11 +101,6 @@ def testAll(
     score=True
     ):
     for set in data.keys():
-
-        #if set == "Dataset 4": # Take this out when DS4 is done
-        #    break
-
-
         print (SEP + "\n" + set + '\n' + SEP)
 
         dataset = data[set]; k = dataset["K"]
