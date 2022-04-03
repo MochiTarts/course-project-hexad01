@@ -66,7 +66,7 @@ def executeTest(case, desc, case_num, useBKM=False, fit=True, predict=True,
     fit and produceFitResultPlot(
         km, X1, y_km1, colours, mode,verbose, case_num)
     
-    print("Inertia for the fitted data is: " + str(km.inertia_))
+    print(indent,"Inertia for the fitted data is:", km.inertia_)
     
     verbose and print(
         SEP +
