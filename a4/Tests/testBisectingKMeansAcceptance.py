@@ -69,7 +69,7 @@ def producePredictResultPlot(km, X2, y_km2, colours, mode, verbose):
             c=np.array(colours[i]), edgecolor='black',
             label=': Centroid'
         )
-    plt.legend(scatterpoints=1)
+    plt.legend(scatterpoints=1, bbox_to_anchor=(1, 1))
     plt.title(mode + " Results After predict() Invocation")
     plt.axis("square")
     plt.grid()
