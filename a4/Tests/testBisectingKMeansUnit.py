@@ -183,9 +183,9 @@ def verifyFitResults(dataset, km):
     expected = [float('%.3f' % elem) for elem in list(np.sort(expCenters.flat))]
     try :
         assert received == expected
-        print("\tPASS Test 1.1: Datapoints belong to the correct cluster.")
+        print("\tPASS Test 1.1: Correct values for cluster centers.")
     except :
-        print("\tFAIL Test 1.1: Datapoint found in the incorrect cluster.")
+        print("\tFAIL Test 1.1: Incorrect values for cluster centers.")
 
     # Condition 2: Datapoints belong to the correct cluster
     try :
@@ -226,9 +226,9 @@ def verifyPredictResults(dataset, results, km):
                 local_min = sum(
                     [(pre_data[id][n] - point[n]) ** 2 for n in range(km.n_features_in_)])
                 assert local_min >= expected_min
-        print("\tPASS Test 2.2: Correct values for result.")
+        print("\tPASS Test 2.2: Datapoints belong to the correct cluster.")
     except :
-        print("\tFAIL Test 2.2: Incorrect values for result.")
+        print("\tFAIL Test 2.2: Datapoints in incorrect cluster.")
 
 
 def verifyFitPredictResults(useBKM, dataset, results, km):
