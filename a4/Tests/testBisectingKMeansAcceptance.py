@@ -8,10 +8,11 @@ indent = ' ' * 4
 SEP = '_' * 100 + '\n'
 
 
-def executeTest(useBKM=True, fit=True, predict=True, verbose=True):
+def executeTest(useBKM=False, fit=True, predict=True, verbose=True):
+    mode = "Bisecting K-Means" if useBKM else "K-Means"
     if verbose:
         print(SEP)
-        print(("Bisecting K-Means" if useBKM else "Kmeans"), "Acceptance Testing")
+        print(mode, "Acceptance Testing")
     KM = BisectingKMeans if useBKM else KMeans
     
     # Create datasets
@@ -44,14 +45,14 @@ def executeTest(useBKM=True, fit=True, predict=True, verbose=True):
     y_km1 = km.fit_predict(X1); y_km2 = km.predict(X2)
     colours = np.random.rand(np.amax(y_km2) + 1, 3)
     matplotlib_axes_logger.setLevel('ERROR')
-    predict and producePredictResultPlot(km, X2, y_km2, colours, verbose)
-    fit and produceFitResultPlot(km, X1, y_km1, colours, verbose)
+    predict and producePredictResultPlot(km, X2, y_km2, colours, mode, verbose)
+    fit and produceFitResultPlot(km, X1, y_km1, colours, mode, verbose)
     verbose and print(
         SEP + "[5] Finished. Please check your file manager for the resulting plots.")
 
 
-def producePredictResultPlot(km, X2, y_km2, colours, verbose):
-    verbose and print(indent, "Plotting Predict Results...")
+def producePredictResultPlot(km, X2, y_km2, colours, mode, verbose):
+    verbose and print(indent, "Plotting", mode, "Predict Results...")
     plt.figure(1)
     for i in np.unique(y_km2):
         plt.scatter(
@@ -69,14 +70,14 @@ def producePredictResultPlot(km, X2, y_km2, colours, verbose):
             label=': Centroid'
         )
     plt.legend(scatterpoints=1)
-    plt.title("Results After predict() Invocation")
+    plt.title(mode + " Results After predict() Invocation")
     plt.axis("square")
     plt.grid()
-    plt.savefig('AT Predict Results.png')
+    plt.savefig(mode + ' Predict Results.png')
 
 
-def produceFitResultPlot(km, X1, y_km1, colours, verbose):
-    verbose and print(indent, "Plotting Fit Results...")
+def produceFitResultPlot(km, X1, y_km1, colours, mode, verbose):
+    verbose and print(indent, "Plotting", mode, "Fit Results...")
     plt.figure(2)
     for i in np.unique(y_km1):
         plt.scatter(
@@ -93,9 +94,18 @@ def produceFitResultPlot(km, X1, y_km1, colours, verbose):
             c=np.array(colours[i]), edgecolor='black',
             label='centroids'
         )
-    plt.title("Results After fit() Invocation")
+    plt.title(mode + " Results After fit() Invocation")
     plt.axis("square")
     plt.grid()
-    plt.savefig('AT Fit Results.png')
+    plt.savefig(mode + ' Fit Results.png')
 
-executeTest()
+
+def main():
+    print("This script is configured to compare" + "plotted results between K-Means and Bisecting K-Means.")
+    prompt = "Please select one of the following:\n[1] K-Means\n[2] Bisecting K-Means\n"
+    selection = input(prompt)
+    useBKM = (selection == "2")
+    executeTest(useBKM=useBKM)
+
+
+main()
