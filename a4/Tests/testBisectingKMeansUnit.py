@@ -9,7 +9,7 @@ DECIMALS = 5
 
 data = {
     "Dataset 1" : {
-        "description" : "2 datapoints and 2 cluster",
+        "description" : "2 datapoints and 2 clusters",
         "K" : 2, "n" : 1,
         "fit" : [[0.2],[0.8]],
         "pre" : [[0.3], [0.9]],
@@ -22,7 +22,7 @@ data = {
         }
     },
     "Dataset 2" : {
-        "description" : "4 datapoints and 2 cluster",
+        "description" : "4 datapoints and 2 clusters",
         "K": 2, "n" : 2,
         "fit" : [[0.8,  0.5],
                 [0.77, 0.58],
@@ -43,7 +43,7 @@ data = {
         }
     },
     "Dataset 3" : {
-        "description" : "7 datapoints and 7 cluster",
+        "description" : "7 datapoints and 7 clusters",
         "K": 7, "n" : 2,
         "fit" : [[0.80, 0.50],
                 [0.74, 0.49],
@@ -71,7 +71,7 @@ data = {
         }
     },
     "Dataset 4" : {
-        "description" : "7 datapoints and 3 cluster",
+        "description" : "7 datapoints and 3 clusters",
         "K": 3, "n" : 2,
         "fit" : [[0.80, 0.50],
                 [0.74, 0.49],
@@ -191,16 +191,16 @@ def verifyFitResults(dataset, km):
     try :
         assert [reMap(list(expLabels))[i] for i in expLabels] == [
             reMap(km.labels_)[i] for i in km.labels_]
-        print("\tPASS Test 5.3: Datapoints belong to their correct cluster.")
+        print("\tPASS Test 1.2: Datapoints belong to the correct cluster.")
     except :
-        print("\tFAIL Test 5.3: Datapoints in incorrect cluster.")
+        print("\tFAIL Test 1.2: Datapoints in incorrect cluster.")
 
     # Condition 3: Contains the same number of labels, and labels are identical
     try :
         assert set(expLabels) == set(km.labels_)
-        print("\tPASS Test 1.2: Correct dimensions for result.")
+        print("\tPASS Test 1.3: Correct dimensions for result.")
     except :
-        print("\tFAIL Test 1.2: Incorrect dimensions for result.")
+        print("\tFAIL Test 1.3: Incorrect dimensions for result.")
 
 
 
@@ -215,7 +215,7 @@ def verifyPredictResults(dataset, results, km):
         print("\tFAIL Test 2.1: Incorrect dimensions for result.")
 
 
-    # Condition 2: Each data point belongs to their correct cluster
+    # Condition 2: Each data point belongs to the correct cluster
     try :
         for id in range(len(pre_data)):
             expected_min = sum(
@@ -241,7 +241,7 @@ def verifyFitPredictResults(useBKM, dataset, results, km):
     except :
         print("\tFAIL Test 5.1: Incorrect dimensions for result.")
 
-    # Condition 2: Each data point belongs to their correct cluster
+    # Condition 2: Each data point belongs to the correct cluster
     try :
         for id in range(len(fit_data)):
             expected_min = sum(
