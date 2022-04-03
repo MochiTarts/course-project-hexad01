@@ -155,24 +155,6 @@ def testAll(cases, useBKM=False, verbose=True):
         testCase = cases[case]
         desc = testCase['desc']
         args = testCase['args']
-        #n_samples = testCase['args']['n_samples']
-        #n_features = testCase['args']['n_features']
-        #fitted_clusters = testCase['args']['fitted_clusters']
-        #predicted_clusters = testCase['args']['predicted_clusters']
-        #n_clusters = testCase['args']['n_clusters']
-        #n_init = testCase['args']['n_init']
-        #max_iter = testCase['args']['max_iter']
-        #fit_random_state = testCase['args']['fit_random_state']
-        #predict_random_state = testCase['args']['predict_random_state']
-        #executeTest(case, desc, useBKM=useBKM, n_samples=n_samples,
-        #            n_features=n_features,
-        #            fitted_clusters=fitted_clusters,
-        #            predicted_clusters=predicted_clusters,
-        #            n_clusters=n_clusters,
-        #            n_init=n_init,
-        #            max_iter=max_iter,
-        #            fit_random_state=fit_random_state,
-        #            predict_random_state=predict_random_state)
         executeTest(case,
                     desc,
                     case_num,
@@ -186,7 +168,10 @@ def testAll(cases, useBKM=False, verbose=True):
 
 def main():
     print("This script is configured to compare" +
-          "plotted results between K-Means and Bisecting K-Means.")
+          "plotted results between K-Means and Bisecting K-Means. " +
+          "Note: if n_features is > 2 for any tests, only the first two " +
+          "will be plotted, which may lead to some unintuitive " +
+          "visualizations.")
     prompt = "Please select one of the following:" + \
              "\n[1] K-Means\n[2] Bisecting K-Means\n"
     selection = input(prompt)
