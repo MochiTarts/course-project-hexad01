@@ -13,7 +13,8 @@ data = {
 
         "expected": {
             "labels" : [1, 0],
-            "centers" : [[0.8], [0.2]]
+            "centers" : [[0.8], [0.2]],
+            "score": -0.02
         }
     },
     "Dataset 2" : {
@@ -32,7 +33,8 @@ data = {
         "expected" : {
             "labels" : [0, 0, 1, 1],
             "centers" : [[0.785, 0.54 ],
-                        [0.27,  0.415]]
+                        [0.27,  0.415]],
+            "score": -0.195575
         }
     },
     "Dataset 3" : {
@@ -58,7 +60,8 @@ data = {
                         [0.77, 0.58],
                         [0.34, 0.4 ],
                         [0.8,  0.5 ],
-                        [0.2,  0.43]]
+                        [0.2,  0.43]],
+            "score": -0.0294
         }
     },
     "Dataset 4" : {
@@ -120,8 +123,8 @@ def testAll(
 
             if score:
                 print("Testing score()")
-                scoremOut = km.score(dataset["pre"])
-                print("\nScore:\n", ScoreOut)
+                scoreOut = km.score(dataset["pre"])
+                print("\nScore:\n", scoreOut)
                 print(verifyScoreResults(dataset, scoreOut))
 
         if fit and predict:
@@ -206,9 +209,8 @@ def verifyTransformResults(dataset, results, km, decimals=5):
     return len(results) == len(data)
 
 
-def verifyFitTransformResults(dataset, results, km):
+def verifyFitTransformResults(dataset, results, km, decimals = 5):
     data = dataset["fit"]
-    decimals = 5
 
     # Condition 1: Each result is the correct size
     if (len(results) != len(data)):
@@ -226,8 +228,8 @@ def verifyFitTransformResults(dataset, results, km):
     return [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
 
 
-def verifyScoreResults():
-    print("\n\n")
+def verifyScoreResults(dataset, results, decimals = 5):
+    return round(dataset["expected"]["score"], decimals) == round(results, decimals)
 
 
 
