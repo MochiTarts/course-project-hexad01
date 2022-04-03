@@ -153,6 +153,16 @@ testCases = {
             'predicted_clusters': 20,
             'n_clusters': 30,
         }
+    },
+    'Test 2 : More generated clusters than n_clusters.': {
+        'desc': 'n_samples=2000, fitted_clusters=20, ' + \
+                'predicted_clusters=20, n_clusters=30',
+        'args': {
+            'n_samples': 2000,
+            'fitted_clusters': 30,
+            'predicted_clusters': 30,
+            'n_clusters': 20,
+        }
     }
 }
 
