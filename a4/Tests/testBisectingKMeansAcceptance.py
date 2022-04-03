@@ -174,7 +174,7 @@ def testAll(cases, useBKM=False, verbose=True):
 
 def main():
     print(LINE)
-    print("This script is configured to compare" +
+    print("This script is configured to compare " +
           "plotted results between K-Means and Bisecting K-Means. " +
           "\n[Note]\n- If n_features > 2, only the first two " +
           "will be plotted which may yield unintuitive visualizations.")
