@@ -2,13 +2,15 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import BisectingKMeans
 import math
 import numpy as np
+from dataset4 import *
 
 SEP = "=" * 100
-DEP = "-" * 100
+DEP = "." * 100
 DECIMALS = 5
 
 data = {
     "Dataset 1" : {
+        "description" : "2 datapoints and 2 cluster",
         "K" : 2, "n" : 1,
         "fit" : [[0.2],[0.8]],
         "pre" : [[0.3], [0.9]],
@@ -21,6 +23,7 @@ data = {
         }
     },
     "Dataset 2" : {
+        "description" : "4 datapoints and 2 cluster",
         "K": 2, "n" : 2,
         "fit" : [[0.8,  0.5],
                 [0.77, 0.58],
@@ -41,6 +44,7 @@ data = {
         }
     },
     "Dataset 3" : {
+        "description" : "7 datapoints and 7 cluster",
         "K": 7, "n" : 2,
         "fit" : [[0.80, 0.50],
                 [0.74, 0.49],
@@ -68,6 +72,7 @@ data = {
         }
     },
     "Dataset 4" : {
+        "description" : "7 datapoints and 3 cluster",
         "K": 3, "n" : 2,
         "fit" : [[0.80, 0.50],
                 [0.74, 0.49],
@@ -92,7 +97,6 @@ data = {
     }
 }
 
-
 def testAll(
     useBKM=True,
     fit=True,
@@ -101,7 +105,8 @@ def testAll(
     score=True
     ):
     for set in data.keys():
-        print (SEP + "\n" + set + '\n' + SEP)
+        print('\n' * 2)
+        print (SEP + "\n" + set + " : " + data[set]["description"] + '\n' + SEP)
 
         dataset = data[set]; k = dataset["K"]
         print("Input:")
@@ -164,8 +169,9 @@ def testAll(
             print("Test 6: fit_transform()")
             transformOut = km.fit_transform(dataset["fit"])
             print("    Output:")
-            print("\tFit Transform: ", [[round(j, DECIMALS) for j in i] for i in transformOut])
-            verifyFitTransformResults(dataset, transformOut, km)
+            print("\tFit Transform: ", [[round(j, DECIMALS) for j in i] for i in transformOut]) if set != "Dataset 5" else print("\tFit Transform: ...")
+            print("    Test Results:")
+            verifyFitTransformResults(useBKM, dataset, transformOut, km)
 
 
 def verifyFitResults(dataset, km):
@@ -173,7 +179,7 @@ def verifyFitResults(dataset, km):
     expLabels = expected["labels"]
     expCenters = np.array(expected["centers"])
 
-    # Condition 1: cluster centers contain the same values, but not necessarily in the same order
+    # Condition 1: Cluster centers contain the same values, but not necessarily in the same order
     received = [float('%.3f' % elem) for elem in list(np.sort(km.cluster_centers_.flat))]
     expected = [float('%.3f' % elem) for elem in list(np.sort(expCenters.flat))]
     try :
@@ -182,7 +188,15 @@ def verifyFitResults(dataset, km):
     except :
         print("\tFAIL Test 1.1: Datapoint found in the incorrect cluster.")
 
-    # Condition 2: Contains the same number of labels, and labels are identical
+    # Condition 2: Datapoints belong to the correct cluster
+    try :
+        assert [reMap(list(expLabels))[i] for i in expLabels] == [
+            reMap(km.labels_)[i] for i in km.labels_]
+        print("\tPASS Test 5.3: Datapoints belong to their correct cluster.")
+    except :
+        print("\tFAIL Test 5.3: Datapoints in incorrect cluster.")
+
+    # Condition 3: Contains the same number of labels, and labels are identical
     try :
         assert set(expLabels) == set(km.labels_)
         print("\tPASS Test 1.2: Correct dimensions for result.")
@@ -277,7 +291,7 @@ def verifyTransformResults(dataset, results, km):
 
 
 
-def verifyFitTransformResults(dataset, results, km):
+def verifyFitTransformResults(useBKM, dataset, results, km):
     fit_data = dataset["fit"]
 
     # Condition 1: Each result is the correct size
@@ -299,9 +313,10 @@ def verifyFitTransformResults(dataset, results, km):
         print("\tFAIL Test 6.2: Incorrect values for result.")
 
     # Condition 3: fit_transform() == fit().transform()
-    expected = KMeans(n_clusters=km.n_clusters).fit(fit_data).transform(fit_data)
+    KM2 = BisectingKMeans if useBKM else KMeans
+    expected = KM2(n_clusters=km.n_clusters).fit(fit_data).transform(fit_data)
     try :
-        assert [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
+        assert [(set([round(j, DECIMALS) for j in i])) for i in results] == [(set([round(j, DECIMALS) for j in i])) for i in expected]
         print("\tPASS Test 6.3: fit_transform() and fit().transform() are equivalent.")
     except :
         print("\tFAIL Test 6.3: fit_transform() differs from fit().transform().")
