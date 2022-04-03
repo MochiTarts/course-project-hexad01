@@ -180,7 +180,7 @@ def verifyFitResults(dataset, km):
         assert received == expected
         print("\tPASS Test 1.1: Datapoints belong to the correct cluster.")
     except :
-        print("\tFAIL Test 1.1: Datapoint found in the incorrect cluster!")
+        print("\tFAIL Test 1.1: Datapoint found in the incorrect cluster.")
 
     # Condition 2: Contains the same number of labels, and labels are identical
     try :
@@ -249,7 +249,7 @@ def verifyFitPredictResults(useBKM, dataset, results, km):
     try :
         assert [reMap(list(results))[i] for i in results] == [
             reMap(expected)[i] for i in expected]
-        print("\tPASS Test 5.3: fit_predict() and fit().predict() are equivellent.")
+        print("\tPASS Test 5.3: fit_predict() and fit().predict() are equivalent.")
     except :
         print("\tFAIL Test 5.3: fit_predict() differs from fit().predict().")
 
@@ -283,9 +283,9 @@ def verifyFitTransformResults(dataset, results, km):
     # Condition 1: Each result is the correct size
     try :
         assert len(results) == len(fit_data)
-        print("\tPASS Test 6.1: Correct dimention for result.")
+        print("\tPASS Test 6.1: Correct dimensions for result.")
     except :
-        print("\tFAIL Test 6.1: Incorrect dimention for result.")
+        print("\tFAIL Test 6.1: Incorrect dimensions for result.")
 
 
     # Condition 2: Each sub result is the distance from a data point to a center
@@ -302,7 +302,7 @@ def verifyFitTransformResults(dataset, results, km):
     expected = KMeans(n_clusters=km.n_clusters).fit(fit_data).transform(fit_data)
     try :
         assert [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
-        print("\tPASS Test 6.3: fit_transform() and fit().transform() are equivellent.")
+        print("\tPASS Test 6.3: fit_transform() and fit().transform() are equivalent.")
     except :
         print("\tFAIL Test 6.3: fit_transform() differs from fit().transform().")
 
