@@ -4,6 +4,9 @@ import math
 import numpy as np
 
 SEP = "=" * 100
+DEP = "-" * 100
+DECIMALS = 5
+
 data = {
     "Dataset 1" : {
         "K" : 2, "n" : 1,
@@ -97,140 +100,219 @@ def testAll(
         if set == "Dataset 4": # Take this out when DS4 is done
             break
 
+
         print (SEP + "\n" + set + '\n' + SEP)
+
         dataset = data[set]; k = dataset["K"]
+        print("Input:")
+        print("\tK = " + str(dataset["K"]))
+        print("\tfit on X = " + str(dataset["fit"]))
+        print("\tpre on X = " + str(dataset["pre"]))
+        print("\ttra on X = " + str(dataset["tra"]))
+        print(SEP)
+
         km = BisectingKMeans(n_clusters=k) if useBKM else KMeans(n_clusters=k)
         X = np.array(dataset["fit"])
 
         if fit:
-            print("Testing fit()")
+            print("Test 1: fit()")
             km.fit(X)
-            print("\nLabels:\n", km.labels_)
-            print("\nCluster Centers:\n", km.cluster_centers_)
-            print(verifyFitResults(dataset, km))
+            print("    Output:")
+            print("\tLabels: ", list(km.labels_))
+            print("\tCluster Centers: ", [[round(j, DECIMALS) for j in i] for i in km.cluster_centers_])
+            print("    Test Results:")
+            verifyFitResults(dataset, km)
+            print(DEP)
 
             if predict:
-                print("Testing predict()")
+                print("Test 2: predict()")
                 predictOut = km.predict(np.array(dataset["pre"]))
-                print("\nPredict:\n", predictOut)
-                print(verifyPredictResults(dataset, predictOut, km))
+                print("    Output:")
+                print("\tPredict: "+ str(list(predictOut)))
+                print("    Test Results:")
+                verifyPredictResults(dataset, predictOut, km)
+                print(DEP)
 
             if transform:
-                print("Testing transform()")
+                print("Test 3: transform()")
                 transformOut = km.transform(dataset["tra"])
-                print("\nTransform:\n", transformOut)
-                print(verifyTransformResults(dataset, transformOut, km))
+                print("    Output:")
+                print("\tTransform: ", [[round(j, DECIMALS) for j in i] for i in transformOut])
+                print("    Test Results:")
+                verifyTransformResults(dataset, transformOut, km)
+                print(DEP)
 
             if score:
-                print("Testing score()")
+                print("Test 4: score()")
                 scoreOut = km.score(dataset["pre"])
-                print("\nScore:\n", scoreOut)
-                print(verifyScoreResults(dataset, scoreOut))
+                print("    Output:")
+                print("\tScore: ", round(scoreOut, DECIMALS))
+                print("    Test Results:")
+                verifyScoreResults(dataset, scoreOut)
+                print(DEP)
 
         if fit and predict:
-            print("Testing fit_predict()")
+            print("Test 5: fit_predict()")
             predictOut = km.fit_predict(dataset["fit"])
-            print("\nFit Predict:\n", predictOut)
-            print(verifyFitPredictResults(useBKM, dataset, predictOut, km))
+            print("    Output:")
+            print("\tFit Predict: ", list(predictOut))
+            print("    Test Results:")
+            verifyFitPredictResults(useBKM, dataset, predictOut, km)
+            print(DEP)
 
         if fit and transform:
-            print("Testing fit_transform()")
+            print("Test 6: fit_transform()")
             transformOut = km.fit_transform(dataset["fit"])
-            print("\nFit Transform:\n", transformOut)
-            print(verifyFitTransformResults(dataset, transformOut, km))
+            print("    Output:")
+            print("\tFit Transform: ", [[round(j, DECIMALS) for j in i] for i in transformOut])
+            verifyFitTransformResults(dataset, transformOut, km)
 
 
 def verifyFitResults(dataset, km):
     expected = dataset["expected"]
     expLabels = expected["labels"]
     expCenters = np.array(expected["centers"])
+
     # Condition 1: cluster centers contain the same values, but not necessarily in the same order
     received = [float('%.3f' % elem) for elem in list(np.sort(km.cluster_centers_.flat))]
     expected = [float('%.3f' % elem) for elem in list(np.sort(expCenters.flat))]
+    try :
+        assert received == expected
+        print("\tPASS Test 1.1: Datapoints belong to the correct cluster.")
+    except :
+        print("\tFAIL Test 1.1: Datapoint found in the incorrect cluster!")
+
     # Condition 2: Contains the same number of labels, and labels are identical
-    return received == expected and set(expLabels) == set(km.labels_)
+    try :
+        assert set(expLabels) == set(km.labels_)
+        print("\tPASS Test 1.2: Correct dimensions for result.")
+    except :
+        print("\tFAIL Test 1.2: Incorrect dimensions for result.")
+
+
 
 
 def verifyPredictResults(dataset, results, km):
-    data = np.array(dataset["pre"])
-    # Condition 1: Each data point belongs to their correct cluster
-    for id in range(len(data)):
-        expected_min = sum(
-            [(data[id][n] - km.cluster_centers_[
-                results[id]][n]) ** 2 for n in range(km.n_features_in_)])
+    pre_data = np.array(dataset["pre"])
+    # Condition 1: Checks that result is the correct size
+    try :
+        assert len(results) == len(pre_data)
+        print("\tPASS Test 2.1: Correct dimensions for result.")
+    except :
+        print("\tFAIL Test 2.1: Incorrect dimensions for result.")
 
-        for point in km.cluster_centers_:
-            local_min = sum(
-                [(data[id][n] - point[n]) ** 2 for n in range(km.n_features_in_)])
-            if (local_min < expected_min):
-                return False
-    # Condition 2: Checks that result is the correct size
-    return len(results) == len(data)
+
+    # Condition 2: Each data point belongs to their correct cluster
+    try :
+        for id in range(len(pre_data)):
+            expected_min = sum(
+                [(pre_data[id][n] - km.cluster_centers_[
+                    results[id]][n]) ** 2 for n in range(km.n_features_in_)])
+
+            for point in km.cluster_centers_:
+                local_min = sum(
+                    [(pre_data[id][n] - point[n]) ** 2 for n in range(km.n_features_in_)])
+                assert local_min >= expected_min
+        print("\tPASS Test 2.2: Correct values for result.")
+    except :
+        print("\tFAIL Test 2.2: Incorrect values for result.")
 
 
 def verifyFitPredictResults(useBKM, dataset, results, km):
-    data = np.array(dataset["fit"])
+    fit_data = np.array(dataset["fit"])
 
     # Condition 1: Checks that results is the correct size
-    if (len(results) != len(data)):
-        return False
+    try :
+        assert len(results) == len(fit_data)
+        print("\tPASS Test 5.1: Correct dimensions for result.")
+    except :
+        print("\tFAIL Test 5.1: Incorrect dimensions for result.")
 
     # Condition 2: Each data point belongs to their correct cluster
-    for id in range(len(data)):
-        expected_min = sum(
-            [(data[id][n] - km.cluster_centers_[
-                results[id]][n]) ** 2 for n in range(km.n_features_in_)])
+    try :
+        for id in range(len(fit_data)):
+            expected_min = sum(
+                [(fit_data[id][n] - km.cluster_centers_[
+                    results[id]][n]) ** 2 for n in range(km.n_features_in_)])
 
-        for point in km.cluster_centers_:
-            local_min = sum(
-                [(data[id][n] - point[n]) ** 2 for n in range(km.n_features_in_)])
-            if (local_min < expected_min):
-                return False
+            for point in km.cluster_centers_:
+                local_min = sum(
+                    [(fit_data[id][n] - point[n]) ** 2 for n in range(km.n_features_in_)])
+                assert local_min >= expected_min
+        print("\tPASS Test 5.2: Correct values for result.")
+    except :
+        print("\tFAIL Test 5.2: Incorrect values for result.")
 
     # Condition 3: fit_predict() == fit().predict()
     KM2 = BisectingKMeans if useBKM else KMeans
-    expected = list(KM2(n_clusters=km.n_clusters).fit(data).predict(data))
-    return [reMap(list(results))[i] for i in results] == [
-        reMap(expected)[i] for i in expected]
+    expected = list(KM2(n_clusters=km.n_clusters).fit(fit_data).predict(fit_data))
+    try :
+        assert [reMap(list(results))[i] for i in results] == [
+            reMap(expected)[i] for i in expected]
+        print("\tPASS Test 5.3: fit_predict() and fit().predict() are equivellent.")
+    except :
+        print("\tFAIL Test 5.3: fit_predict() differs from fit().predict().")
 
 
-def verifyTransformResults(dataset, results, km, decimals=5):
-    data = dataset["tra"]
-    # Condition 1: Each sub result is the distance from a data point to a center
-    result = [([round(j, decimals) for j in i]) for i in results]
-    for id in range(len(data)):
-        s = [round((math.sqrt(sum(
-            [(data[id][n] - center[n]) ** 2 for n in range(
-                km.n_features_in_)]))), decimals) for center in km.cluster_centers_]
-        if s != result[id]:
-            return False
-
-    # Condition 2: Each result is the corrrect size
-    return len(results) == len(data)
-
-
-def verifyFitTransformResults(dataset, results, km, decimals = 5):
-    data = dataset["fit"]
-
+def verifyTransformResults(dataset, results, km):
+    tra_data = dataset["tra"]
     # Condition 1: Each result is the correct size
-    if (len(results) != len(data)):
-        return False
+    try :
+        assert len(results) == len(tra_data)
+        print("\tPASS Test 3.1: Correct dimensions for result.")
+    except :
+        print("\tFAIL Test 3.1: Incorrect dimensions for result.")
 
     # Condition 2: Each sub result is the distance from a data point to a center
-    result = [([round(j, decimals) for j in i]) for i in results]
-    for id in range(len(data)):
-        s = [round((math.sqrt(sum([(data[id][n] - center[n])**2 for n in range(km.n_features_in_)]))), decimals) for center in km.cluster_centers_]
-        if s != result[id]:
-            return False
+    try :
+        result = [([round(j, DECIMALS) for j in i]) for i in results]
+        for id in range(len(tra_data)):
+            s = [round((math.sqrt(sum(
+                [(tra_data[id][n] - center[n]) ** 2 for n in range(
+                    km.n_features_in_)]))), DECIMALS) for center in km.cluster_centers_]
+            assert s == result[id]
+        print("\tPASS Test 3.2: Correct values for result.")
+    except :
+        print("\tFAIL Test 3.2: Incorrect values for result.")
+
+
+
+def verifyFitTransformResults(dataset, results, km):
+    fit_data = dataset["fit"]
+
+    # Condition 1: Each result is the correct size
+    try :
+        assert len(results) == len(fit_data)
+        print("\tPASS Test 6.1: Correct dimention for result.")
+    except :
+        print("\tFAIL Test 6.1: Incorrect dimention for result.")
+
+
+    # Condition 2: Each sub result is the distance from a data point to a center
+    result = [([round(j, DECIMALS) for j in i]) for i in results]
+    try :
+        for id in range(len(fit_data)):
+            s = [round((math.sqrt(sum([(fit_data[id][n] - center[n])**2 for n in range(km.n_features_in_)]))), DECIMALS) for center in km.cluster_centers_]
+            assert s == result[id]
+        print("\tPASS Test 6.2: Correct values for result.")
+    except :
+        print("\tFAIL Test 6.2: Incorrect values for result.")
 
     # Condition 3: fit_transform() == fit().transform()
-    expected = KMeans(n_clusters=km.n_clusters).fit(data).transform(data)
-    return [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
+    expected = KMeans(n_clusters=km.n_clusters).fit(fit_data).transform(fit_data)
+    try :
+        assert [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
+        print("\tPASS Test 6.3: fit_transform() and fit().transform() are equivellent.")
+    except :
+        print("\tFAIL Test 6.3: fit_transform() differs from fit().transform().")
 
 
-def verifyScoreResults(dataset, results, decimals = 5):
-    return round(dataset["expected"]["score"], decimals) == round(results, decimals)
-
+def verifyScoreResults(dataset, results, DECIMALS = 5):
+    try :
+        assert round(dataset["expected"]["score"], DECIMALS) == round(results, DECIMALS)
+        print("\tPASS Test 4.1: Correct score.")
+    except :
+        print("\tFAIL Test 4.1: Incorrect score.")
 
 
 def reMap(arr):
