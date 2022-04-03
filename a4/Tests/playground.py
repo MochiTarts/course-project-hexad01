@@ -120,6 +120,9 @@ def testAll(
 
             if score:
                 print("Testing score()")
+                scoremOut = km.score(dataset["pre"])
+                print("\nScore:\n", ScoreOut)
+                print(verifyScoreResults(dataset, scoreOut))
 
         if fit and predict:
             print("Testing fit_predict()")
