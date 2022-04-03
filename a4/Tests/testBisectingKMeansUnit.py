@@ -2,7 +2,6 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import BisectingKMeans
 import math
 import numpy as np
-from dataset4 import *
 
 SEP = "=" * 100
 DEP = "." * 100
