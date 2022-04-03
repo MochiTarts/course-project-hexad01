@@ -119,7 +119,7 @@ def testAll(
         X = np.array(dataset["fit"])
 
         if fit:
-            print("Test 1: fit()")
+            print("Test Group 1: fit()")
             km.fit(X)
             print("    Output:")
             print("\tLabels: ", list(km.labels_))
@@ -129,7 +129,7 @@ def testAll(
             print(DEP)
 
             if predict:
-                print("Test 2: predict()")
+                print("Test Group 2: predict()")
                 predictOut = km.predict(np.array(dataset["pre"]))
                 print("    Output:")
                 print("\tPredict: "+ str(list(predictOut)))
@@ -138,7 +138,7 @@ def testAll(
                 print(DEP)
 
             if transform:
-                print("Test 3: transform()")
+                print("Test Group 3: transform()")
                 transformOut = km.transform(dataset["tra"])
                 print("    Output:")
                 print("\tTransform: ", [[round(j, DECIMALS) for j in i] for i in transformOut])
@@ -147,7 +147,7 @@ def testAll(
                 print(DEP)
 
             if score:
-                print("Test 4: score()")
+                print("Test Group 4: score()")
                 scoreOut = km.score(dataset["pre"])
                 print("    Output:")
                 print("\tScore: ", round(scoreOut, DECIMALS))
@@ -156,7 +156,7 @@ def testAll(
                 print(DEP)
 
         if fit and predict:
-            print("Test 5: fit_predict()")
+            print("Test Group 5: fit_predict()")
             predictOut = km.fit_predict(dataset["fit"])
             print("    Output:")
             print("\tFit Predict: ", list(predictOut))
@@ -165,7 +165,7 @@ def testAll(
             print(DEP)
 
         if fit and transform:
-            print("Test 6: fit_transform()")
+            print("Test Group 6: fit_transform()")
             transformOut = km.fit_transform(dataset["fit"])
             print("    Output:")
             print("\tFit Transform: ", [[round(j, DECIMALS) for j in i] for i in transformOut]) if set != "Dataset 5" else print("\tFit Transform: ...")
