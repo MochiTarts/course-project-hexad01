@@ -28,7 +28,7 @@ data = {
         "tra" : [[0.83, 0.92],
                 [0.27, 0.18],
                 [0.49, 0.03]],
-        
+
         "expected" : {
             "labels" : [0, 0, 1, 1],
             "centers" : [[0.785, 0.54 ],
@@ -65,15 +65,15 @@ data = {
         "K": 3, "n" : 2,
         "fit" : [[0.80, 0.50],
                 [0.74, 0.49],
-                [0.77, 0.58], 
+                [0.77, 0.58],
                 [0.34, 0.40],
                 [0.20, 0.43],
                 [0.25, 0.38],
-                [0.63, 0.82]], 
+                [0.63, 0.82]],
         "pre" : [[0.26, 0.42],
                 [0.70, 0.47],
                 [0.47, 0.83]],
-        
+
         "expected" : {
             "labels": None,
             "centers": None
@@ -83,10 +83,10 @@ data = {
 
 
 def testAll(
-    useBKM=True, 
-    fit=True, 
-    predict=True, 
-    transform=True, 
+    useBKM=True,
+    fit=True,
+    predict=True,
+    transform=True,
     score=True
     ):
     for set in data.keys():
@@ -117,26 +117,26 @@ def testAll(
                 transformOut = km.transform(dataset["tra"])
                 print("\nTransform:\n", transformOut)
                 print(verifyTransformResults(dataset, transformOut, km))
-            
+
             if score:
                 print("Testing score()")
-        
+
         if fit and predict:
             print("Testing fit_predict()")
             predictOut = km.fit_predict(dataset["fit"])
             print("\nFit Predict:\n", predictOut)
             print(verifyFitPredictResults(useBKM, dataset, predictOut, km))
-        
+
         if fit and transform:
             print("Testing fit_transform()")
             transformOut = km.fit_transform(dataset["fit"])
             print("\nFit Transform:\n", transformOut)
             print(verifyFitTransformResults(dataset, transformOut, km))
 
-        
+
 def verifyFitResults(dataset, km):
     expected = dataset["expected"]
-    expLabels = expected["labels"] 
+    expLabels = expected["labels"]
     expCenters = np.array(expected["centers"])
     # Condition 1: cluster centers contain the same values, but not necessarily in the same order
     received = [float('%.3f' % elem) for elem in list(np.sort(km.cluster_centers_.flat))]
@@ -223,6 +223,11 @@ def verifyFitTransformResults(dataset, results, km):
     return [(set([j for j in i])) for i in results] == [(set([j for j in i])) for i in expected]
 
 
+def verifyScoreResults():
+    print("\n\n")
+
+
+
 def reMap(arr):
     dict = {}
     counter = 0
@@ -232,6 +237,6 @@ def reMap(arr):
             counter += 1
     return dict
 
-   
+
 if __name__ == '__main__':
     testAll()
