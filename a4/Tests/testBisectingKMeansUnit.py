@@ -157,7 +157,7 @@ def testAll(
 
         if fit and predict:
             print("Test Group 5: fit_predict()")
-            predictOut = km.fit_predict(dataset["fit"])
+            predictOut = km.fit_predict(np.array(dataset["fit"]))
             print("    Output:")
             print("\tFit Predict: ", list(predictOut))
             print("    Test Results:")
@@ -166,7 +166,7 @@ def testAll(
 
         if fit and transform:
             print("Test Group 6: fit_transform()")
-            transformOut = km.fit_transform(dataset["fit"])
+            transformOut = km.fit_transform(np.array(dataset["fit"]))
             print("    Output:")
             print("\tFit Transform: ", [[round(j, DECIMALS) for j in i] for i in transformOut]) if set != "Dataset 5" else print("\tFit Transform: ...")
             print("    Test Results:")
@@ -268,7 +268,7 @@ def verifyFitPredictResults(useBKM, dataset, results, km):
 
 
 def verifyTransformResults(dataset, results, km):
-    tra_data = dataset["tra"]
+    tra_data = np.array(dataset["tra"])
     # Condition 1: Each result is the correct size
     try :
         assert len(results) == len(tra_data)
@@ -291,7 +291,7 @@ def verifyTransformResults(dataset, results, km):
 
 
 def verifyFitTransformResults(useBKM, dataset, results, km):
-    fit_data = dataset["fit"]
+    fit_data = np.array(dataset["fit"])
 
     # Condition 1: Each result is the correct size
     try :
